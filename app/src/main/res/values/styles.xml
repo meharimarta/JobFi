@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base app theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here -->
+    </style>
+
+    <!-- Custom text appearance for the chip -->
+    <style name="CustomChipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">14sp</item>
+       <!-- <item name="android:textColor">@color/black</item>-->
+    </style>
+
+    <!-- Custom chip style (optional) -->
+    <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
+    </style>
+</resources>

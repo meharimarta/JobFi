@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="dialog_image_desc">Img
+		</string>
+	<string name="app_name">JobFi</string>
+    <string name="hello_world">Hello, World!</string>
+	<string-array name="item_list">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <item>Item 4</item>
+    </string-array>
+</resources>

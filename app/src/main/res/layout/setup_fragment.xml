@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<ScrollView
+		android:gravity="center"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="16dp"
+			>
+
+			<ImageView
+				android:id="@+id/logo"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:src="@drawable/logo"
+				android:color="#561BBB"
+				android:layout_gravity="center"
+				android:contentDescription="Logo"
+				android:layout_marginBottom="24dp"/>
+
+			<TextView
+				android:id="@+id/setup"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="App Setup."
+				android:color="#561BBB"
+				android:layout_gravity="center"
+				android:contentDescription="Logo"
+				android:layout_marginBottom="24dp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Name"
+				android:textSize="16sp"
+				android:layout_marginBottom="8dp"/>
+
+			<EditText
+				android:id="@+id/input_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Your name"
+				android:background="@drawable/input_border"
+				android:padding="12dp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Email"
+				android:textSize="16sp"
+				android:layout_marginTop="16dp"
+				android:layout_marginBottom="8dp"/>
+
+			<EditText
+				android:id="@+id/input_emial"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Enter email"
+				android:background="@drawable/input_border"
+				android:padding="12dp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Field of study or major"
+				android:textSize="16sp"
+				android:layout_marginTop="16dp"
+				android:layout_marginBottom="8dp"/>
+
+			<!--<EditText
+				android:textColor="#FFFFFFFF"
+				android:id="@+id/input_field_of_studyr"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Field of study"
+				android:background="@drawable/input_border"
+				android:padding="12dp"/>-->
+
+			
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/input_border"
+				android:hint="Select items">
+				
+				<AutoCompleteTextView
+					android:padding="12dp"
+					android:id="@+id/autoCompleteTextView"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Low priority" />
+				
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<!-- Chip Group to Display Selected Items -->
+			<com.google.android.material.chip.ChipGroup
+				android:id="@+id/chipGroup"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				app:singleLine="true"
+				app:chipSpacing="8dp"/>
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Experiance"
+				android:textSize="16sp"
+				android:layout_marginTop="16dp"
+				android:layout_marginBottom="8dp"/>
+
+			<EditText
+				android:id="@+id/input_experiance"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Experiance"
+				android:background="@drawable/input_border"
+				android:padding="12dp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Your current job"
+				android:textSize="16sp"
+				android:layout_marginTop="16dp"
+				android:layout_marginBottom="8dp"/>
+
+			<EditText
+				android:id="@+id/input_current_job"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="Your current job"
+				android:background="@drawable/input_border"
+				android:padding="12dp"/>
+
+			<Button
+				android:id="@+id/save_setup"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+				android:layout_alignParentBottom="true"
+				android:layout_marginBottom="16dp"
+				android:layout_marginTop="16dp"
+				android:text="Save"
+				android:textColor="@android:color/black"
+				android:background="@drawable/fancy_button_background"
+				android:padding="10dp"
+				android:ellipsize="marquee"/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+</RelativeLayout>
+

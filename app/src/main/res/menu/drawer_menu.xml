@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+		android:icon="@drawable/ic_home"
+		android:showAsAction="always"/>
+	
+	<item
+		android:id="@+id/nav_blog"
+		android:title="Blog"
+		android:icon="@drawable/ic_blog"
+		android:showAsAction="always"/>
+	
+    <item
+        android:id="@+id/nav_setup"
+        android:title="Setup"
+		android:icon="@drawable/ic_settings"
+		android:showAsAction="always"/>
+	<item
+		android:id="@+id/nav_build_cv"
+		android:title="Build CV"
+		android:icon="@drawable/ic_forum"
+		android:showAsAction="always"/>
+
+	<item
+		android:id="@+id/nav_services"
+		android:title="Services"
+		android:icon="@drawable/ic_services"/>
+
+	<item
+		android:id="@+id/nav_about"
+		android:title="About"
+		android:icon="@drawable/ic_about"
+		android:showAsAction="always"/>
+</menu>
+
