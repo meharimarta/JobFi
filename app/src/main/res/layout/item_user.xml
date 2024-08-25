@@ -23,50 +23,46 @@
 			android:id="@+id/company_logo"/>
 
         <TextView
+			android:id="@+id/company_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ethiopian Public Health Institute"
+			android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
+			android:id="@+id/field_of_study"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="IT, Computer Science and..."
+			android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="14sp" />
 
         <TextView
+			android:id="@+id/job_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+			android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:text="Job Position: Data Science Expert"
             android:textSize="16sp" />
 
         <TextView
+			android:id="@+id/salaray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Salary: / month"
+			android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="14sp" />
 
         <TextView
+			android:id="@+id/dead_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Deadline: 2024-08-18"
+			android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="14sp" />
-		
-		<TextView
-            android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
-
-        <TextView
-            android:id="@+id/emailTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
-
+	
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

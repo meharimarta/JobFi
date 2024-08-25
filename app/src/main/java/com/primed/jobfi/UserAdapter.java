@@ -55,8 +55,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 		Button seeMore;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.nameTextView);
-            emailTextView = itemView.findViewById(R.id.emailTextView);
+           // nameTextView = itemView.findViewById(R.id.nameTextView);
+          //  emailTextView = itemView.findViewById(R.id.emailTextView);
 			seeMore = itemView.findViewById(R.id.see_more_btn);
         }
     }
