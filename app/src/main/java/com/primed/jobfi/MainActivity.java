@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.fragment.app.Fragment;
+import org.json.JSONObject;
+import org.json.JSONException;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,14 +24,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.replace(R.id.fragment_container, new SetupFragment());
-		ft.addToBackStack(null);
-		ft.commit();
-		
-		
+        
+        String token;
+		FileManager fileManager = new FileManager(this, "user_data.txt");
+        JSONObject userData = fileManager.getFileAsJsonObject();
+        Log.d("***Main activuty", userData.toString());
+        try
+        {
+            token =(new JSONObject(userData.getString("responseData"))).getString("token");
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            token = "";
+        }
+        if(! token.isEmpty()) {
+            replaceFragment(new HomeFragment());
+        } else {
+            replaceFragment(new SetupFragment());
+        }
+        
 		drawerLayout = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.navigation_view);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -46,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
 						case R.id.nav_blog:
 							//replaceFragment(new FragmentWebView());
 							break;
-
+                         case R.id.nav_setup:
+                             replaceFragment(new SetupFragment());
 					}
 					drawerLayout.closeDrawer(navigationView); // Close the drawer after handling item click
 					return true; // Indicate that the item click is handled

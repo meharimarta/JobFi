@@ -1,29 +1,30 @@
 package com.primed.jobfi;
+
 import android.content.Context;
 import android.util.Log;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 public class FileManager
 {
-    private static FileManager managerInstance;
-    private static Context context;
+    private Context context;
     private String filename = "user_data.txt";
-    public static FileManager manager(Context ctx)
+    public FileManager(Context ctx, String fileName)
     {
-        if (managerInstance == null)
-        {
-            context = ctx;
-            managerInstance = new FileManager();
-        }
-        return managerInstance;
+        this.filename = fileName;
+        this.context = ctx;
     }
-
+    
+    public FileManager getInstance() {
+        return this;
+    }
+    
     public boolean saveFile(String data)
     {
-
         try
         {
             FileOutputStream fos = this.context.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -38,7 +39,7 @@ public class FileManager
         }
         return true;
     }
-
+    
     public String getFileDataAsString()
     {
         StringBuilder data = new StringBuilder();
@@ -68,4 +69,16 @@ public class FileManager
         }
         return data.toString();
     }
+    
+    public JSONObject getFileAsJsonObject()
+    {
+        String data = getFileDataAsString();
+        try {
+        return new JSONObject(data);
+        } catch(JSONException e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
 }
+

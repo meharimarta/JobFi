@@ -31,6 +31,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
     private ArrayAdapter<FieldOfStudy> adapter;
     private List<FieldOfStudy> selectedItems;
     private Button submitButton;
+    private User user;
     private String url = "http://localhost:8001/api/";
     private String TAG = "***SETUP FRAGMENT";
 	@Override
@@ -38,7 +39,8 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
 	{
 		//return super.onCreateView(inflater, container, savedInstanceState);
 		final View  v = inflater.inflate(R.layout.setup_fragment, container, false);
-
+       //intiate user instamce
+        user = new User(getActivity());
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         chipGroup = v. findViewById(R.id.chipGroup);
         submitButton = v.findViewById(R.id.save_setup);
@@ -87,6 +89,18 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
         NetworkUtils.sendDataToServer(getActivity(), "", new FieldOfStudyDataRecived());
 
         setupViews(v);
+       
+        Log.d(TAG, user.fieldOfStudy.optJSONObject(0).toString());
+        //   List<FieldOfStudy> savedFieldOfStudyList = new ArrayList<>();
+        try {
+            for(int i = 0; i < user.fieldOfStudy.length(); i++)
+            {
+                JSONObject userD = user.fieldOfStudy.optJSONObject(i);
+                addChip(new FieldOfStudy(userD.getString("major"), userD.getInt("id")));
+            }
+        } catch(JSONException e) {
+
+        }
 		return v;
 	}
 
@@ -98,6 +112,14 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
         final  EditText inputSalary = v.findViewById(R.id.input_salary);
         final EditText currentJobs = v.findViewById(R.id.input_current_job);
         final EditText inputPassword = v.findViewById(R.id.input_password);
+        
+        if(user.token != null && !user.token.isEmpty()) {
+            nameInput.setText(user.name);
+            emailInput.setText(user.email);
+            inputExperiance.setText(user.experiance);
+            inputSalary.setText(user.salary);
+            currentJobs.setText(user.currentJob);
+        }
         submitButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v)
@@ -126,7 +148,8 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
                         userData.put("experiance", experiance);
                         userData.put("current_job", job);
                         userData.put("salary", salary);
-                        userData.put("fieldOfStidies", selectedItemIds.toString());
+                        userData.put("field_of_studies", selectedItemIds);
+                        
                         NetworkUtils.sendDataToServer(getActivity(), userData.toString(), SetupFragment.this);
                         
                     }
@@ -204,9 +227,11 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
     @Override
     public void onTaskCompleted(String success)
     {
-
+        FileManager fm = new FileManager(getContext(), "user_data.txt");
+        if(fm.saveFile(success)) {
+            
+        }
         UIUtils.showSuccessDialog(getActivity(), "Server response", success);
-        // else UIUtils.showErrorDialog(Activity.this, "Failed to send data to server :( is this correct API ? =>" + NetworkUtils.url);
     }
 
     private class FieldOfStudyDataRecived implements NetworkUtils.OnTaskCompleted
@@ -217,16 +242,24 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
             ArrayList<JSONObject> setupData = new ArrayList<>();
             try
             {
+                JSONObject res = new JSONObject(response);
+                Log.d(TAG, response);
+                if(res.getInt("responseCode") == 200) 
+                {
                 JSONObject jsonObject = new JSONObject(response);
-                JSONArray data = jsonObject.getJSONArray("data");
+                JSONArray data = (new JSONObject(jsonObject.getString("responseData"))).getJSONArray("data");
                 for (int i = 0; i < data.length(); i++)
                 {
                     setupData.add(data.optJSONObject(i));
                 }
+               }else {
+                   UIUtils.showErrorDialog(getActivity(), "Network error","Please connect to.internet");
+                   return;
+               }
             }
             catch (JSONException e)
             {
-                UIUtils.showErrorDialog(getActivity(), "Error fetching data", ":(");
+                UIUtils.showErrorDialog(getActivity(), "Internal error", ":(");
                 e.printStackTrace();
             }
 
@@ -247,7 +280,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
             adapter.addAll(fieldOfStudyList);
             adapter.notifyDataSetChanged();
             
-            UIUtils.showSuccessDialog(getActivity(), "Data updated", response);
+           UIUtils.showSuccessDialog(getActivity(), "Data updated", response);
         }
     }
 }
