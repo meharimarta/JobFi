@@ -67,7 +67,21 @@
 				android:hint="Enter email"
 				android:background="@drawable/input_border"
 				android:padding="12dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password: must be >= 6 characters"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
 
+            <EditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="password"
+                android:background="@drawable/input_border"
+				android:padding="12dp"/>
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -130,7 +144,23 @@
 				android:hint="Your current job"
 				android:background="@drawable/input_border"
 				android:padding="12dp"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expected salary"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
 
+            <EditText
+                android:id="@+id/input_salary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Salary"
+                android:background="@drawable/input_border"
+                android:padding="12dp"/>
+            
 			<Button
 				android:id="@+id/save_setup"
 				android:layout_width="wrap_content"
