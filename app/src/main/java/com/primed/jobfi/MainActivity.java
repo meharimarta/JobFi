@@ -24,22 +24,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+        final User user = new User(this);
         String token;
-		FileManager fileManager = new FileManager(this, "user_data.txt");
-        JSONObject userData = fileManager.getFileAsJsonObject();
-        Log.d("***Main activuty", userData.toString());
-        try
-        {
-            token =(new JSONObject(userData.getString("responseData"))).getString("token");
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-            token = "";
-        }
-        if(! token.isEmpty()) {
-            replaceFragment(new HomeFragment());
+	//	FileManager fileManager = new FileManager(this, "user_data.txt");
+  //      JSONObject userData = fileManager.getFileAsJsonObject();
+ //       Log.d("***Main activuty", userData.toString());
+        
+        token = user.getToken();
+        
+        if(token != null &&  token != "") {
+            replaceFragment(new HomeFragment(user));
         } else {
             replaceFragment(new SetupFragment());
         }
@@ -53,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 					switch (item.getItemId()) {
 						case R.id.nav_home:
-						    replaceFragment(new HomeFragment());
+						    replaceFragment(new HomeFragment(user));
 							break;
 						case R.id.nav_about:
 							// Handle item two click

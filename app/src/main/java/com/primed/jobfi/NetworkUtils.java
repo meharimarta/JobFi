@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkUtils
 {
@@ -21,11 +23,12 @@ public class NetworkUtils
         new SendDataTask(context, data, callback).execute();
     }
 
-    private static class SendDataTask extends AsyncTask<Void, Void, String>
+    public static class SendDataTask extends AsyncTask<Void, Void, String>
     {
 
         private String data;
         private OnTaskCompleted callback;
+        private Map<String, String> headers = new HashMap<>(); // Store custom headers
 
         public SendDataTask(Context context, String data, OnTaskCompleted callback)
         {
@@ -33,10 +36,16 @@ public class NetworkUtils
             this.callback = callback;
         }
 
+        public void setHeader(String header, String value)
+        {
+            headers.put(header, value);
+        }
+
         public static void setRoute(String route)
         {
             url = url + route;
         }
+
         @Override
         protected String doInBackground(Void... voids)
         {
@@ -49,6 +58,12 @@ public class NetworkUtils
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
+
+                // Set custom headers
+                for (Map.Entry<String, String> entry : headers.entrySet())
+                {
+                    urlConnection.setRequestProperty(entry.getKey(), entry.getValue());
+                }
 
                 // Send the JSON data to the server
                 try (OutputStream os = urlConnection.getOutputStream()) {
@@ -71,7 +86,6 @@ public class NetworkUtils
                         }
                     }
                     return getJsonFormat(response.toString(), responseCode);
-                    // return formatJsonResponse(response.toString());
                 }
                 else
                 {
@@ -99,6 +113,7 @@ public class NetworkUtils
                 }
             }
         }
+
         protected String getJsonFormat(String response, int code)
         {
             String resData = "0";
@@ -110,6 +125,7 @@ public class NetworkUtils
             {e.printStackTrace();}
             return resData;
         }
+
         @Override
         protected void onPostExecute(String result)
         {
@@ -137,4 +153,3 @@ public class NetworkUtils
         void onTaskCompleted(String response);
     }
 }
-
