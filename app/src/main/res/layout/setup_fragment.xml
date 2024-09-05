@@ -36,7 +36,7 @@
 				android:contentDescription="Logo"
 				android:layout_marginBottom="24dp"
 				android:textStyle="bold"/>
-
+           
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -65,6 +65,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:hint="Enter email"
+                android:inputType="textEmailAddress"
 				android:background="@drawable/input_border"
 				android:padding="12dp"/>
             <TextView
@@ -79,6 +80,7 @@
                 android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="password"
                 android:background="@drawable/input_border"
 				android:padding="12dp"/>
@@ -113,10 +115,23 @@
                     android:gravity="start"/>
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/input_year_of_graduation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="2021-08-11"
+                android:clickable="true"
+                android:textSize="16sp"
+                android:background="@drawable/input_border"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
+
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Experiance"
+				
+                android:text="Experiance"
 				android:textSize="16sp"
 				android:layout_marginTop="16dp"
 				android:layout_marginBottom="8dp"/>
@@ -125,6 +140,7 @@
 				android:id="@+id/input_experiance"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+                android:inputType="number"
 				android:hint="Experiance"
 				android:background="@drawable/input_border"
 				android:padding="12dp"/>
@@ -150,10 +166,12 @@
                 android:layout_height="wrap_content"
                 android:text="Expected salary"
                 android:textSize="16sp"
+                
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"/>
 
             <EditText
+                android:inputType="number"
                 android:id="@+id/input_salary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

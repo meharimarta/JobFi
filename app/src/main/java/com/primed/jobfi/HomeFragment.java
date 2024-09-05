@@ -14,9 +14,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.util.Log;
 import java.security.PrivateKey;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class HomeFragment extends Fragment implements NetworkUtils.OnTaskCompleted
 {
+    private String url = "http://localhost:8001/api/";
     private User user;
     List<Job> jobList = new ArrayList<>();
     JobAdapter jobAdapter = new JobAdapter(jobList, getContext());
@@ -57,20 +61,6 @@ public class HomeFragment extends Fragment implements NetworkUtils.OnTaskComplet
 
 		recyclerView = v.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-		/*jobList.add(new Job("Coca cola", 
-							"October 12, 2024", 
-							"Maintainance", 
-							"Mechanical Engineering field of study", 
-							"https://locgo.com"));
-
-		jobList.add(new Job("Heniken", 
-							"October 12, 2024", 
-							"Maintainance", 
-							"Mechanical Engineering field of study", 
-							"https://locgo.com"));*/
-        // Set up the adapter
-
 	    
 		recyclerView.setAdapter(jobAdapter);
 
@@ -79,6 +69,15 @@ public class HomeFragment extends Fragment implements NetworkUtils.OnTaskComplet
 		return v;
 	}
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Create the ViewModel using the ViewModelFactory
+        FragViewModelFactory factory = new FragViewModelFactory(user, getContext());
+        FragViewModel viewModel = new ViewModelProvider(this, factory).get(FragViewModel.class);
+    }
+    
+    
 	private void setupButtons(View v)
 	{
 
@@ -87,10 +86,9 @@ public class HomeFragment extends Fragment implements NetworkUtils.OnTaskComplet
     private void getJobs() {
         String userToken = user.getToken();
         NetworkUtils.SendDataTask task = new NetworkUtils.SendDataTask(getActivity(), "", this);
-        NetworkUtils.url = NetworkUtils.url + "get-jobs";
+        NetworkUtils.url = url + "get-jobs";
         task.setHeader("Authorization", "Bearer "+ userToken);
         task.execute();
-      /*  NetworkUtils.setHeader("Authorization", "Bearer "+ userToken);
-        NetworkUtils.sendDataToServer(getActivity(), "token", this);*/
     }
 }
+

@@ -1,16 +1,18 @@
 package com.primed.jobfi;
 
+import android.app.DatePickerDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.chip.Chip;
@@ -18,10 +20,10 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
-import android.util.Log;
+import android.widget.TextView;
 
 public class SetupFragment extends Fragment implements NetworkUtils.OnTaskCompleted
 {
@@ -105,7 +107,9 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
             }
 		return v;
 	}
-
+    
+    final List<String> yearOfGraduation = new ArrayList<>();
+    
     private void setupViews(View v)
     {
         final EditText nameInput = v.findViewById(R.id.input_name);
@@ -114,7 +118,8 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
         final EditText inputSalary = v.findViewById(R.id.input_salary);
         final EditText currentJobs = v.findViewById(R.id.input_current_job);
         final EditText inputPassword = v.findViewById(R.id.input_password);
-
+        final TextView inputYearOfGraduation = v.findViewById(R.id.input_year_of_graduation);
+        
         if (user.getToken() != null && !user.getToken().isEmpty())
         {
             nameInput.setText(user.getName());
@@ -122,20 +127,47 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
             inputExperiance.setText(user.getExperience());
             inputSalary.setText(user.getSalary());
             currentJobs.setText(user.getCurrentJob());
+            inputYearOfGraduation.setText(user.getYearOfGraduation());
         }
+        
+         inputYearOfGraduation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create a new instance of DatePickerDialog and show it
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                            // Handle the selected date here
+                            yearOfGraduation.add(0, selectedYear + "-" + (selectedMonth +1) + "-" +selectedDay);
+                            inputYearOfGraduation.setText(yearOfGraduation.get(0));
+                            // You can now use the selectedDate string
+                        }
+                    }, year, month, day);
+
+                datePickerDialog.show();
+            }
+        });
+        
         submitButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v)
                 {
                     // url to send data
                     NetworkUtils.url = "http://localhost:8001/api/create-user";
-
+                   
                     String name =  nameInput.getText().toString();
                     String email = emailInput.getText().toString();
-                    String experiance = inputExperiance.getText().toString();
+                    int experiance =Integer.parseInt( inputExperiance.getText().toString());
                     String job = currentJobs.getText().toString();
                     String password = inputPassword.getText().toString();
-                    String salary = inputSalary.getText().toString();
+                    int salary = Integer.parseInt(inputSalary.getText().toString());
+                    
                     // Prepare data to send to server
                     List<Integer> selectedItemIds = new ArrayList<>();
                     for (FieldOfStudy item : selectedItems)
@@ -151,10 +183,18 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
                         userData.put("experiance", experiance);
                         userData.put("current_job", job);
                         userData.put("salary", salary);
-                        userData.put("field_of_studies", selectedItemIds);
-
+                        userData.put("field_of_studies", selectedItemIds.toString());
+                        userData.put("year_of_graduation", yearOfGraduation.get(0));
+                        Log.d(TAG, userData.toString());
+                        if(user.getToken() != null) {
+                            NetworkUtils.url = url + "update-user-data";
+                            NetworkUtils.SendDataTask task = new NetworkUtils.SendDataTask(getActivity() ,userData.toString(), SetupFragment.this);
+                            
+                            task.setHeader("Authorization", "Bearer "+ user.getToken());
+                            task.execute();
+                        } else {
                         NetworkUtils.sendDataToServer(getActivity(), userData.toString(), SetupFragment.this);
-
+                        }
                     }
                     catch (JSONException e)
                     {

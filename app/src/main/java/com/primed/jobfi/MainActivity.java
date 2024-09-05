@@ -1,39 +1,35 @@
 package com.primed.jobfi;
 
-import android.app.Activity;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.drawerlayout.widget.DrawerLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import org.json.JSONObject;
-import org.json.JSONException;
-import android.util.Log;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 	private DrawerLayout drawerLayout;
-	
+	private final List<User> user = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        final User user = new User(this);
-        String token;
-	//	FileManager fileManager = new FileManager(this, "user_data.txt");
-  //      JSONObject userData = fileManager.getFileAsJsonObject();
- //       Log.d("***Main activuty", userData.toString());
+        user.add(0, new User(this));
         
-        token = user.getToken();
+        String token;
+
+        token = user.get(0).getToken();
         
         if(token != null &&  token != "") {
-            replaceFragment(new HomeFragment(user));
+            replaceFragment(new HomeFragment(user.get(0)));
         } else {
             replaceFragment(new SetupFragment());
         }
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 				public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 					switch (item.getItemId()) {
 						case R.id.nav_home:
-						    replaceFragment(new HomeFragment(user));
+						    replaceFragment(new HomeFragment(user.get(0)));
 							break;
 						case R.id.nav_about:
 							// Handle item two click
@@ -74,7 +70,26 @@ public class MainActivity extends AppCompatActivity {
 				}
 			});
     }
+
+    @Override
+    protected void onResume()
+    {
+        //create new user instance on resume of app
+        super.onResume();
+        user.add(0, new User(this));
+
+        String token;
+
+        token = user.get(0).getToken();
+
+        if(token != null &&  token != "") {
+            replaceFragment(new HomeFragment(user.get(0)));
+        } else {
+            replaceFragment(new SetupFragment());
+        }
+    }
 	
+    
 	private void replaceFragment(Fragment fragment) {
 		// Assume you have a FragmentManager instance
 		FragmentManager fragmentManager = getSupportFragmentManager();

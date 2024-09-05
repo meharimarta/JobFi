@@ -37,6 +37,11 @@ public class Job
 	{
 		return this.companyName;
 	}
+	public String getCompanyLogo()
+    
+    {
+        return this.logo;
+    }
 	
 	public String getFieldOfStudy()
 	{
