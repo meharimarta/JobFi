@@ -80,6 +80,11 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder>
         }
     }
     
+    public void updateData(List<Job> jobs) {
+        this.jobList = jobs;
+        notifyDataSetChanged();
+    }
+    
     public void loadImageIntoImageView(final String urlString, final ImageView imageView) {
         Bitmap cachedBitmap = imageCache.getBitmapFromMemCache(urlString);
         if (cachedBitmap != null) {
