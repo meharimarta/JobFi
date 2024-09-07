@@ -16,6 +16,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.primed.jobfi.fragments.LoginFragment;
 
 public class HomeFragment extends Fragment // implements NetworkUtils.OnTaskCompleted //FragViewModel.ProgressStatus
 {
@@ -59,9 +60,19 @@ public class HomeFragment extends Fragment // implements NetworkUtils.OnTaskComp
                     progressDialog.hide();
                 }
             });
-        progressDialog.setDialogTitle("Searching your jobs 💸");
+	    progressDialog.setDialogTitle("Searching your jobs 💸");
         progressDialog.setDialogInfo("Your setup match jobs will be avialable ....");
         progressDialog.show();
+		
+		fragViewModel.setAuthCallBack(new FragViewModel.AuthStatusCallBack() {
+				@Override
+				public void authError()
+				{
+					progressDialog.hide();
+					((MainActivity)requireActivity()).replaceFragment(new LoginFragment());
+				}
+	   });
+        
 		return v;
 	}
 }

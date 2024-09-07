@@ -26,21 +26,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // SQL command to create the user table
     private static final String TABLE_USER_CREATE =
-    "CREATE TABLE " + TABLE_USER + " (" +
-    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    COLUMN_NAME + " TEXT, " +
-    COLUMN_EMAIL + " TEXT, " +
-    COLUMN_EXPERIENCE + " TEXT, " +
-    COLUMN_SALARY + " TEXT, " +
-    COLUMN_YEAR_OF_GRADUATION + " TEXT, " +
-    COLUMN_TOKEN + " TEXT);";
+	"CREATE TABLE " + TABLE_USER + " (" +
+	COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	COLUMN_NAME + " TEXT, " +
+	COLUMN_EMAIL + " TEXT, " +
+	COLUMN_EXPERIENCE + " TEXT, " +
+	COLUMN_SALARY + " TEXT, " +
+	COLUMN_YEAR_OF_GRADUATION + " TEXT, " +
+	COLUMN_TOKEN + " TEXT);";
 
     // SQL command to create the field of study table
     private static final String TABLE_FIELD_OF_STUDY_CREATE =
-    "CREATE TABLE " + TABLE_FIELD_OF_STUDY + " (" +
-    COLUMN_MAJOR_ID + " INTEGER, " +
-    COLUMN_MAJOR + " TEXT, " +
-    "PRIMARY KEY (" + COLUMN_MAJOR_ID + "));";
+	"CREATE TABLE " + TABLE_FIELD_OF_STUDY + " (" +
+	COLUMN_MAJOR_ID + " INTEGER, " +
+	COLUMN_MAJOR + " TEXT, " +
+	"PRIMARY KEY (" + COLUMN_MAJOR_ID + "));";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,5 +57,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FIELD_OF_STUDY);
         onCreate(db);
+    }
+
+    // Method to truncate a table
+    public void truncateTable(String tableName) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Delete all rows from the table
+        db.execSQL("DELETE FROM " + tableName);
+
+        // Reset auto-increment counter (if the table has an auto-increment column)
+        db.execSQL("DELETE FROM sqlite_sequence WHERE name='" + tableName + "'");
+		
+        db.close();
     }
 }

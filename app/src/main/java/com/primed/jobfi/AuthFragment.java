@@ -30,6 +30,14 @@ public class AuthFragment extends Fragment
                 }
          });
          
+		 Button signupBtn = v.findViewById(R.id.signup_btn);
+		 
+		 signupBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			 public void onClick(View v) {
+				 ((MainActivity) getActivity()).replaceFragment(new SetupFragment());
+			 }
+		 });
          
          return v;
    }

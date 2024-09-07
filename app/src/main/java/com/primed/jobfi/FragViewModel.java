@@ -19,6 +19,7 @@ public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompl
     private MutableLiveData<List<Job>> jobList;
     private Fragment host;
     private String url = "http://localhost:8001/api/";
+	private AuthStatusCallBack authCallback;
     // ViewModel constructor with parameters
     public FragViewModel(User user, Context ctx, Fragment host) {
         this.context = ctx;
@@ -46,9 +47,11 @@ public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompl
     public void onTaskCompleted(String response)
     {
         List<Job> retrivedJobList = new ArrayList<>();
+		JSONObject responseObject = new JSONObject();
         try
         {
-            JSONArray resData = new JSONArray((new JSONObject(response).optString("responseData")));
+	        responseObject = new JSONObject(response);
+            JSONArray resData = new JSONArray(responseObject.optString("responseData"));
 
             for(int i = 0; i < resData.length(); i++) {
                 JSONObject job = resData.optJSONObject(i);
@@ -61,11 +64,18 @@ public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompl
         }
         catch (JSONException e)
         {
+			int resCode = responseObject.optInt("responseCode");
+			if(resCode == 401) {
+				if(authCallback != null) authCallback.authError();
+			}//trigger event
             Log.d("Home Fragment Job list", jobList.toString());
             e.printStackTrace();
         }
     }
     
+	public void setAuthCallBack(AuthStatusCallBack callback) {
+		this.authCallback = callback;
+	}
     public void updateJobList(List<Job> jobs) {
         this.jobList.setValue(jobs);
     }
@@ -78,4 +88,8 @@ public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompl
         public void viewModelProgressStarted();
         public void viewModelPprogressEnded();
     }
+	
+	public interface AuthStatusCallBack {
+		public void authError();
+	}
 }

@@ -39,28 +39,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp"/>
-
-                <EditText
-                    android:id="@+id/input_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Your name"
-                    android:background="@drawable/input_border"
-                    android:padding="12dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Email"
                     android:textSize="16sp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"/>
 
                 <EditText
-                    android:id="@+id/input_emial"
+                    android:id="@+id/input_emaill"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter email"
@@ -84,19 +69,30 @@
                     android:background="@drawable/input_border"
                     android:padding="12dp"/>
 
-                <Button
+                
+            <FrameLayout
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<Button
                     android:id="@+id/make_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
                     android:text="Log in"
                     android:background="@drawable/fancy_button_background"
                     android:padding="10dp"
+					android:layout_gravity="center"
                     android:ellipsize="marquee"/>
-            
+
+				<!-- ProgressBar to be shown inside the Button -->
+				<ProgressBar
+					android:id="@+id/btn_progress_bar"
+					android:layout_width="30dp"
+					android:layout_height="30dp"
+					android:layout_gravity="center"
+					android:visibility="gone"
+					style="?android:attr/progressBarStyleSmall" />
+			</FrameLayout>
 
         </LinearLayout>
     </ScrollView>

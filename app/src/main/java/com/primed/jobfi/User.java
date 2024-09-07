@@ -58,6 +58,10 @@ public class User
 
     public boolean createUser(String name, String email, String experience, String salary, String yearOfGraduation, String token, String fieldOfStudy)
     {
+		Log.d(TAG, token);
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		dbHelper.truncateTable(DatabaseHelper.TABLE_USER);
+		dbHelper.truncateTable(DatabaseHelper.TABLE_FIELD_OF_STUDY);
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_NAME, name);
         values.put(DatabaseHelper.COLUMN_EMAIL, email);
@@ -108,110 +112,124 @@ public class User
         return fieldOfStudyList;
     }
     public boolean createUserFromJsonString(String jsonString)
-    {
-        boolean status = true;
-        String userName = "";
-        String userEmail = "";
-        int userId = 0;
-        String userToken = "";
-        String userExperience = "";
-        String userYearOfGraduation = "";
-        String userSalary = "";
-        JSONArray userFieldOfStudy;
-        
-        JSONObject data;
-        try
-        {
-            data = new JSONObject(jsonString);
-            Log.d(TAG, "L 126 " + data.toString());
-        }
-        catch (JSONException e)
-        {
-            Log.d(TAG, "unable to parse raw string");
-            e.printStackTrace();
-            data = null;
-            status = false;
-        }
-        if (data != null)
-        {
-            JSONObject resData;
-            try
-            {
-                resData = new JSONObject(data.optString("responseData"));
-            }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-                resData = null;
-            }
-            if (resData != null)
-            {
-                userToken = resData.optString("token", "");
+	{
+		boolean status = true;
+		String userName = "";
+		String userEmail = "";
+		int userId = 0;
+		String userToken = "";
+		String userExperience = "";
+		String userYearOfGraduation = "";
+		String userSalary = "";
+		JSONArray userFieldOfStudy;
 
-                JSONObject userData = resData.optJSONObject("user");
-                if (userData != null)
-                {
-                    userEmail = userData.optString("email", "");
-                    userName = userData.optString("name", "");
-                    userId = userData.optInt("id", 0);
-                }
-                else
-                {
-                    Log.d(TAG, "User data is null");
-                    status =false;
-                }
+		JSONObject data;
+		try
+		{
+			data = new JSONObject(jsonString);
+			Log.d(TAG, "L 126 " + data.toString());
+		}
+		catch (JSONException e)
+		{
+			Log.d(TAG, "Unable to parse raw string");
+			e.printStackTrace();
+			return false;  // Return false if unable to parse the JSON string
+		}
 
-                JSONObject infoData = resData.optJSONObject("info");
-                if (infoData != null)
-                {
-                    userExperience = infoData.optString("experience", "");
-                    userYearOfGraduation = infoData.optString("year_of_graduation", "");
-                    userSalary = infoData.optString("salary", "");
-                }
-                else
-                {
-                    status=false;
-                    Log.d(TAG, "Info data is null");
-                }
+		// Ensure data is not null
+		if (data != null)
+		{
+			JSONObject resData;
+			try
+			{
+				resData = new JSONObject(data.optString("responseData"));
+			}
+			catch (JSONException e)
+			{
+				Log.d(TAG, "Unable to parse responseData");
+				e.printStackTrace();
+				return false;  // Return false if responseData parsing fails
+			}
 
-                try
-                {
-                    userFieldOfStudy = new JSONArray(resData.optString("field_of_studies", ""));
-                }
-                catch (JSONException e)
-                {
-                    userFieldOfStudy = null;
-                }
-                if (userFieldOfStudy == null)
-                {
-                    userFieldOfStudy = new JSONArray();  // Assign an empty array if null
-                } else {
-                    
-                   for(int i = 0; i < userFieldOfStudy.length(); i++) {
-                     JSONObject jso =  userFieldOfStudy.optJSONObject(i);
-                     String major = jso.optString("major", "");
-                     int id = jso.optInt("major_id", 0);
-                     addFieldOfStudy(id, major);
-                   }
-                }
-                createUser(userName, userEmail,userExperience, userSalary, userYearOfGraduation, userToken, "");
-            }
-            else
-            {
-                status = false;
-                Log.d(TAG, "Response data is null");
-            }
+			if (resData != null)
+			{
+				userToken = resData.optString("token", "");
 
-        }
-        else
-        {
-            status = false;
-            Log.d(TAG, "Data is null");
-        }
-        
-        return status;
-    }
+				JSONObject userData = resData.optJSONObject("user");
+				if (userData != null)
+				{
+					userEmail = userData.optString("email", "");
+					userName = userData.optString("name", "");
+					userId = userData.optInt("id", 0);
+				}
+				else
+				{
+					Log.d(TAG, "User data is null");
+					return false;  // Return false if user data is missing
+				}
 
+				JSONObject infoData = resData.optJSONObject("info");
+				if (infoData != null)
+				{
+					userExperience = infoData.optString("experience", "");
+					userYearOfGraduation = infoData.optString("year_of_graduation", "");
+					userSalary = infoData.optString("salary", "");
+				}
+				else
+				{
+					Log.d(TAG, "Info data is null");
+					return false;  // Return false if info data is missing
+				}
+
+				// Process field_of_studies
+				try
+				{
+					userFieldOfStudy = new JSONArray(resData.optString("field_of_studies", ""));
+				}
+				catch (JSONException e)
+				{
+					Log.d(TAG, "Error parsing field_of_studies");
+					e.printStackTrace();
+					return false;  // Return false if field_of_studies parsing fails
+				}
+
+				if (userFieldOfStudy != null)
+				{
+					for (int i = 0; i < userFieldOfStudy.length(); i++)
+					{
+						JSONObject jso = userFieldOfStudy.optJSONObject(i);
+						Log.d(TAG +"Field of study :", jso.toString());
+						if (jso != null)
+						{
+							String major = jso.optString("major", "");
+							int id = jso.optInt("id", 0);
+							addFieldOfStudy(id, major);
+						}
+					}
+				}
+
+				// Create user after all data has been processed
+				boolean created = createUser(userName, userEmail, userExperience, userSalary, userYearOfGraduation, userToken, "");
+				if (!created)
+				{
+					Log.d(TAG, "User creation failed");
+					return false;  // Return false if user creation fails
+				}
+			}
+			else
+			{
+				Log.d(TAG, "Response data is null");
+				return false;  // Return false if responseData is null
+			}
+		}
+		else
+		{
+			Log.d(TAG, "Data is null");
+			return false;  // Return false if data is null
+		}
+
+		return status;
+	}
 
     public String getName()
     {

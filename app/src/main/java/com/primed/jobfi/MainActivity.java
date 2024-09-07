@@ -34,15 +34,15 @@ public class MainActivity extends AppCompatActivity
         String token;
 
         token = user.get(0).getToken();
-replaceFragment(new AuthFragment());
-     /*   if (token != null && !token.isEmpty())
+
+        if (token != null && !token.isEmpty())
         {
             replaceFragment(new HomeFragment(user.get(0)));
         }
         else
         {
-            replaceFragment(new SetupFragment());
-        }*/
+            replaceFragment(new AuthFragment());
+        }
 
         drawerLayout = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.navigation_view);

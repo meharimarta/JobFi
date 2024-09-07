@@ -12,12 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import androidx.fragment.app.FragmentActivity;
 
 public class NetworkUtils
 {
 
-    public static String url = "http://localhost:8001/api/"; // Replace with your actual server URL
-
+    public static String url = "http://localhost:8001/api/";
     public static void sendDataToServer(Context context, String data, OnTaskCompleted callback)
     {
         new SendDataTask(context, data, callback).execute();

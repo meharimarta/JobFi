@@ -91,7 +91,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
             });
         NetworkUtils.url = url + "get-setup-data";
 
-        NetworkUtils.sendDataToServer(getActivity(), "", new FieldOfStudyDataRecived());
+        NetworkUtils.sendDataToServer(getContext(), "", new FieldOfStudyDataRecived());
 
         setupViews(v);
 
@@ -194,7 +194,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
                             task.setHeader("Authorization", "Bearer "+ user.getToken());
                             task.execute();
                         } else {
-                        NetworkUtils.sendDataToServer(getActivity(), userData.toString(), SetupFragment.this);
+                        NetworkUtils.sendDataToServer(getContext(), userData.toString(), SetupFragment.this);
                         }
                     }
                     catch (JSONException e)
