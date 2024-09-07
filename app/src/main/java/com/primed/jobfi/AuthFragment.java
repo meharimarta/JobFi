@@ -7,6 +7,9 @@ import android.view.View;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.Button;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import com.primed.jobfi.fragments.LoginFragment;
 
 public class AuthFragment extends Fragment
 {
@@ -17,21 +20,17 @@ public class AuthFragment extends Fragment
          //super.onCreateView(inflater, container, savedInstanceState);
          
         final View v = inflater.inflate(R.layout.auth_page, container, false);
-        final LinearLayout authBtns = v.findViewById(R.id.auth_buttons);
-        final LinearLayout loginView = v.findViewById(R.id.auth_login_view);
-         
-         loginView.setVisibility(View.GONE);
-         
          Button showLoginViewBtn = v.findViewById(R.id.login_btn);
          
         showLoginViewBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View p1)
                 {
-                    authBtns.setVisibility(View.GONE);
-                    loginView.setVisibility(View.VISIBLE);
+                 ((MainActivity) getActivity()).replaceFragment(new LoginFragment());
                 }
          });
+         
+         
          return v;
    }
 }

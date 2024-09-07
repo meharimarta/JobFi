@@ -14,6 +14,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
+import com.primed.jobfi.fragments.LoginFragment;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -57,7 +58,6 @@ replaceFragment(new AuthFragment());
 
                             // If not found in backstack, add a new instance
                             replaceFragment(new HomeFragment(user.get(0)));
-
                             break;
                         case R.id.nav_about:
                             // Handle About fragment
@@ -90,7 +90,7 @@ replaceFragment(new AuthFragment());
             });
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(
