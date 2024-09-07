@@ -36,7 +36,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder>
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
 		
-        Job job = jobList.get(position);
+        final Job job = jobList.get(position);
 		
         holder.companyName.setText(job.getCompanyName());
         holder.fieldOfStudy.setText(job.getFieldOfStudy());
@@ -47,7 +47,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder>
 		holder.seeMore.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					CustomDialogFragment cdf = CustomDialogFragment.newInstance("Job title", "Job detail");
+					CustomDialogFragment cdf = CustomDialogFragment.newInstance(job);
 
 					cdf.show(context.getSupportFragmentManager(), "Custom dialog");
 				}

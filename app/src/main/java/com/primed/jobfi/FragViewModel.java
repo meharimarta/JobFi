@@ -11,16 +11,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import android.content.Context;
 import android.app.job.JobScheduler;
+import androidx.fragment.app.Fragment;
 
 public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompleted {
     private User user;
     private Context context;
     private MutableLiveData<List<Job>> jobList;
+    private Fragment host;
     private String url = "http://localhost:8001/api/";
     // ViewModel constructor with parameters
-    public FragViewModel(User user, Context ctx) {
+    public FragViewModel(User user, Context ctx, Fragment host) {
         this.context = ctx;
         this.user = user;
+        this.host = host;
     }
     
     public LiveData<List<Job>> getJobs() {
@@ -69,5 +72,10 @@ public class FragViewModel extends ViewModel implements NetworkUtils.OnTaskCompl
     
     public User getUser() {
         return user;
+    }
+    
+    public interface ProgressStatus {
+        public void viewModelProgressStarted();
+        public void viewModelPprogressEnded();
     }
 }

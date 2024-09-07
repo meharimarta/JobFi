@@ -13,14 +13,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
+import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     private DrawerLayout drawerLayout;
     private final List<User> user = new ArrayList<>();
 
+    private String TAG = "#### MainActivity";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         user.add(0, new User(this));
@@ -28,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
         String token;
 
         token = user.get(0).getToken();
-
-        if (token != null && !token.isEmpty()) {
-            replaceFragment(new HomeFragment(user.get(0)), "HomeFragment");
-        } else {
-            replaceFragment(new SetupFragment(), null);
+replaceFragment(new AuthFragment());
+     /*   if (token != null && !token.isEmpty())
+        {
+            replaceFragment(new HomeFragment(user.get(0)));
         }
+        else
+        {
+            replaceFragment(new SetupFragment());
+        }*/
 
         drawerLayout = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.navigation_view);
@@ -41,17 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
+                public boolean onNavigationItemSelected(@NonNull MenuItem item)
+                {
+                    switch (item.getItemId())
+                    {
                         case R.id.nav_home:
-                            // Check if HomeFragment is already in backstack
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            boolean fragmentPopped = fragmentManager.popBackStackImmediate("HomeFragment", 0);
 
-                            if (!fragmentPopped) {
-                                // If not found in backstack, add a new instance
-                                replaceFragment(new HomeFragment(user.get(0)), "HomeFragment");
-                            }
+                            // If not found in backstack, add a new instance
+                            replaceFragment(new HomeFragment(user.get(0)));
+
                             break;
                         case R.id.nav_about:
                             // Handle About fragment
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                             // Handle Blog fragment
                             break;
                         case R.id.nav_setup:
-                            replaceFragment(new SetupFragment(), null);
+                            replaceFragment(new SetupFragment());
                             break;
                     }
                     drawerLayout.closeDrawer(navigationView); // Close the drawer after handling item click
@@ -70,59 +76,43 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if (drawerLayout.isDrawerOpen(navigationView)) {
+                public void onClick(View view)
+                {
+                    if (drawerLayout.isDrawerOpen(navigationView))
+                    {
                         drawerLayout.closeDrawer(navigationView);
-                    } else {
+                    }
+                    else
+                    {
                         drawerLayout.openDrawer(navigationView);
                     }
                 }
             });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        String token = user.get(0).getToken();
-
-        // Check if fragment is already loaded before replacing it
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-
-        if (currentFragment == null) {
-            if (token != null && !token.isEmpty()) {
-                replaceFragment(new HomeFragment(user.get(0)), "HomeFragment");
-            } else {
-                replaceFragment(new SetupFragment(), null);
-            }
-        }
-    }
-
-    private void replaceFragment(Fragment fragment, String tag) {
-        // Get FragmentManager instance
+    private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // Begin a transaction
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        // Set custom animations if desired
         fragmentTransaction.setCustomAnimations(
-            R.anim.slide_in_right,  // Enter animation for the new fragment
-            R.anim.slide_out_left,  // Exit animation for the current fragment
-            R.anim.slide_in_left,   // Enter animation when popping back to the current fragment
-            R.anim.slide_out_right  // Exit animation when popping back to the previous fragment
+            R.anim.slide_in_right,
+            R.anim.slide_out_left,
+            R.anim.slide_in_left,
+            R.anim.slide_out_right
         );
 
-        // Replace the current fragment with the new fragment
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        String tag = fragment.getClass().getSimpleName();  // Use fragment class name as tag
+        Fragment fragmentFromBackstack = fragmentManager.findFragmentByTag(tag);
 
-        // Optionally, add the transaction to the backstack with a tag (like "HomeFragment")
-        if (tag != null) {
-            fragmentTransaction.addToBackStack(tag);
+        if (fragmentFromBackstack != null) {
+            // If the fragment is found but not on top, pop backstack until this fragment is reached
+            fragmentManager.popBackStack(tag, 0);
+            
         } else {
-            fragmentTransaction.addToBackStack(null);
+            // Fragment not found, add a new instance
+            fragmentTransaction.replace(R.id.fragment_container, fragment, tag)
+                .addToBackStack(tag);
+            fragmentTransaction.commit();
         }
-
-        // Commit the transaction
-        fragmentTransaction.commit();
     }
 }
+

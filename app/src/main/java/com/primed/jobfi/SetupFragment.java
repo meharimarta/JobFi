@@ -105,6 +105,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
                 selectedItems.add(fd);
                 addChip(fd);
             }
+          yearOfGraduation.add(0, "2000-05-05");
 		return v;
 	}
     
@@ -163,10 +164,10 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
                    
                     String name =  nameInput.getText().toString();
                     String email = emailInput.getText().toString();
-                    int experiance =Integer.parseInt( inputExperiance.getText().toString());
+                    int experiance = Integer.parseInt((inputExperiance.getText().toString().isEmpty() ? "0" : inputExperiance.getText().toString()));
                     String job = currentJobs.getText().toString();
                     String password = inputPassword.getText().toString();
-                    int salary = Integer.parseInt(inputSalary.getText().toString());
+                    int salary = Integer.parseInt((inputSalary.getText().toString().isEmpty() ? "0" : inputSalary.getText().toString()));
                     
                     // Prepare data to send to server
                     List<Integer> selectedItemIds = new ArrayList<>();

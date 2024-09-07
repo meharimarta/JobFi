@@ -37,9 +37,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 		holder.seeMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				CustomDialogFragment cdf = CustomDialogFragment.newInstance("Job title", "Job detail");
+				/*CustomDialogFragment cdf = CustomDialogFragment.newInstance(job);
 
-				cdf.show(context.getSupportFragmentManager(), "Custom dialog");
+				cdf.show(context.getSupportFragmentManager(), "Custom dialog");*/
 			}
 		});
     }

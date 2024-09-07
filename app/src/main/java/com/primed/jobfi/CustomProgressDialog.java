@@ -39,4 +39,16 @@ public class CustomProgressDialog extends Dialog {
         dialogTitle.setText("Success");
         updateProgressInfo(successMessage);
     }
+    
+    public void setDialogTitle(String title) {
+        this.dialogTitle.setText(title);
+    }
+    
+    public void setDialogInfo(String info) {
+        this.progressInfo.setText(info);
+    }
+    private interface ProgressStatus {
+        public void progressStarted();
+        public void progressEnded();
+    }
 }
