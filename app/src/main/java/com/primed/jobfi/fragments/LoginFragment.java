@@ -39,6 +39,7 @@ public class LoginFragment extends Fragment implements NetworkUtils.OnTaskComple
 			if(resCode == 200) {
 				User user = new User(getActivity());
 				if(user.createUserFromJsonString(response)) {
+					user.loadUserData();
 					((MainActivity)getActivity()).replaceFragment(new HomeFragment(user));
 				}
 				
