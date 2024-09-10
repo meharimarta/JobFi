@@ -89,8 +89,8 @@ public class User
     {
         List<JSONObject> fieldOfStudyList = new ArrayList<>();
         Cursor cursor = database.query(DatabaseHelper.TABLE_FIELD_OF_STUDY, null, null, null, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst())
+		Log.d(TAG +"Cursor+",cursor.toString());
+        if (cursor.moveToFirst())
         {
             do {
                 int majorId = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MAJOR_ID));
@@ -100,14 +100,14 @@ public class User
                     fieldOfStudyList.add(new JSONObject("{\"major\":\"" + major + "\",\"major_id\":\"" + majorId + "\" }"));
                 }
                 catch (JSONException e)
-                {}
+                {e.printStackTrace();}
               //  fieldOfStudyList.add("ID: " + majorId + " - Major: " + major);
             } while (cursor.moveToNext());
             cursor.close();
         }
         else
         {
-            Log.d(TAG, "No field of study data found.");
+            Log.d(TAG, "No field of study data found." + fieldOfStudyList.toString());
         }
         return fieldOfStudyList;
     }
@@ -185,6 +185,7 @@ public class User
 				try
 				{
 					userFieldOfStudy = new JSONArray(resData.optString("field_of_studies", ""));
+					Log.d(TAG + " Field of srudy", userFieldOfStudy.toString());
 				}
 				catch (JSONException e)
 				{
@@ -203,7 +204,10 @@ public class User
 						{
 							String major = jso.optString("major", "");
 							int id = jso.optInt("id", 0);
-							addFieldOfStudy(id, major);
+							if(!addFieldOfStudy(id, major)) {
+								Log.d(TAG, "Failed to crrated field of study" + major);
+								return false;
+							}
 						}
 					}
 				}

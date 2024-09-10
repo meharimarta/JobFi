@@ -101,7 +101,7 @@ public class SetupFragment extends Fragment implements NetworkUtils.OnTaskComple
         for (int i = 0; i < user.getAllFieldsOfStudy().size();  i++)
             {
                 JSONObject userD = user.getAllFieldsOfStudy().get(i);
-                FieldOfStudy fd = new FieldOfStudy(userD.optString("major"), userD.optInt("major_id"));
+                FieldOfStudy fd = new FieldOfStudy(userD.optString("major"), userD.optInt("id"));
                 selectedItems.add(fd);
                 addChip(fd);
             }
